@@ -1,9 +1,13 @@
+import { getAuth, signOut } from 'firebase/auth';
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link } from 'react-router-dom';
-import useFirebase from '../hooks/useFirebase';
+import app from '../../firebase.init';
 
+const auth = getAuth(app);
 const Navigation = () => {
-        const { user, handleSignOut } = useFirebase();
+        const [user] = useAuthState(auth);
+
         return (
                 <div className="text-center mt-5 pb-5">
                         <Link to="/">Home</Link>
@@ -13,7 +17,7 @@ const Navigation = () => {
                         <span className="ms-3">{user?.displayName ? user.displayName : ''}</span>
                         {
                                 user?.uid ?
-                                        <button onClick={handleSignOut} className="ms-3">Logout</button>
+                                        <button onClick={() => signOut(auth)} className="ms-3">Logout</button>
                                         :
                                         <Link className="ms-3" to="/login">Login</Link>
                         }
